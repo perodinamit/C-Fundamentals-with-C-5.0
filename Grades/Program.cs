@@ -14,25 +14,43 @@ namespace Grades
         {
 
             GradeBook book = new GradeBook("Matej");
+            //FileStream stream = null;
+            //StreamReader reader = null;
 
             try
-            { 
-            string[] lines = File.ReadAllLines("grade.txt");
-            foreach (string line in lines)
             {
-                float grade = float.Parse(line);
-                book.AddGrade(grade);
-            }
+                using (FileStream stream = File.Open("grade.txt", FileMode.Open))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        float grade = float.Parse(line);
+                        book.AddGrade(grade);
+                        line = reader.ReadLine();
+                    }
+                }
+
+            //string[] lines = File.ReadAllLines("grade.txt");
+            //foreach (string line in lines)
+            //{
+            //    float grade = float.Parse(line);
+            //    book.AddGrade(grade);
+            //}
             Console.WriteLine("-------------------");
             }
             catch (FileNotFoundException ex)
             {
+                
                 Console.WriteLine("Could not locate the file!");
+                return;
             }
             catch (UnauthorizedAccessException ex)
             {
                 Console.WriteLine("No access!!!");
+                return;
             }
+
 
             book.AddGrade(91);
             book.AddGrade(89.5f);
